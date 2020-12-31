@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM openjdk:10
 RUN apt update
 RUN apt-get install -y maven
 RUN mkdir /home/projet
