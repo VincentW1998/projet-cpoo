@@ -61,7 +61,7 @@ Si vous ètes sous MacOs lancez maven avec la commande:
 
 ## Etape 3 : Instruction de compilation et d'exécution**
 
-Aller dans le dossier lego et exécutez le fichier run
+Aller dans le dossier calculatrice et exécutez le fichier run
 *  `./run`
 
 
