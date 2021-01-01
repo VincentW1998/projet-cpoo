@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class History{
     private LinkedList <Double> history;
-    private Map <String, String> variables;
+    private Map <String, Double> variables;
     private Map <String, Function <String,Boolean> > cmd;
     private Stack <Double> stack;
 
@@ -22,8 +22,8 @@ public class History{
     public  void initCmds() {
         cmd.put("hist",(i) -> {return histRPN(i); });
         cmd.put("pile",(i) -> {return pile(i);});
-//        cmd.put("!",(c) -> store(c));
-//        cmd.put("?",(c) -> getVal(c));
+        cmd.put("!",(c) -> store(c));
+        cmd.put("?",(c) -> getVal(c));
 //        cmd.put("hist",(i) -> {System.out.println("hist " + i); return 2.2;});
 //        cmd.put("pile",(i) -> {System.out.println("pile " + i); return 2.2;});
 //        cmd.put("!",(c) -> {System.out.println("store " + c) ; return false;});
@@ -76,12 +76,26 @@ public class History{
         stack.push(d);
         return true;
     }
-//
-//    public boolean store(String str){
-//        variables.put(str.substring(1),stack.pop());
-////        history.addLast(stack.peek());
-//    }
-//
+
+    public boolean store(String str){
+        if(stack.isEmpty()){
+            System.out.println("the stack is empty");
+            return false;
+        }
+        variables.put(str,stack.pop());
+        return true;
+//        history.addLast(stack.peek());
+    }
+
+    public boolean getVal(String str){
+        if(!variables.containsKey(str)){
+            System.out.println("the variable you are trying to access does not exist");
+            return false;
+        }
+        stack.push(variables.get(str));
+        return true;
+    }
+
 
 
 
@@ -90,13 +104,14 @@ public class History{
 
     //    ************ FILTRES ***********
 
-    public boolean isCmd(String s) {
+    public Boolean isCmd(String s) {
         if(s.equals("p")){
             dispAll();
             return false;
         }
+        if(cmd.containsKey(s.substring(0, 1))) return true;
         if (s.length() > 4) return cmd.containsKey(s.substring(0, 4));
-        return cmd.containsKey(s.substring(0, 1));
+        return false;
     }
 
     public int getNumber(String s) { // prend un string (123) et rend 123
@@ -125,8 +140,7 @@ public class History{
     public Boolean whichCmd(String s){
 
         if (s.charAt(0) == '!' || s.charAt(0) == '?'){
-            System.out.println("not implemented");
-            return false;
+           return cmd.get(s.substring(0,1)).apply(s.substring(1));
         }
         else return histOrPile(s);
     }
@@ -142,7 +156,7 @@ public class History{
             System.out.print(acc.peek()+ " | ");
             stack.push(acc.pop());
         }
-        System.out.println();
+        System.out.println("\nVariables Stockes : " + variables.toString());
     }
 
     public boolean histOrPile (String s){
