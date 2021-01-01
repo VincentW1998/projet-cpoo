@@ -2,27 +2,22 @@ import java.util.LinkedList;
 import java.util.Stack;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.Scanner;
-import java.util.Stack;
 
 
 public class History{
-    static LinkedList <Double> history = new LinkedList <Double> ();
-    static Map <String, String> valeurs = new HashMap<>();
-    static Map <String, Function <Integer,Double> > cmd = new HashMap<>();
-    static Stack <Double> stack = new Stack<Double>(); // create the stack for numbers
-//    public History(){
-//        history = new LinkedList <Double> ();
-//        valeurs = new HashMap<>();
-//        cmd= new HashMap<>();
-//        initCmds();
-//    }
+    static LinkedList <Double> history;
+    static Map <String, String> valeurs;
+    static Map <String, Function <Integer,Double> > cmd;
+    static Stack <Double> stack;
+
+    public History(Stack s){
+        history = new LinkedList <Double> ();
+        valeurs = new HashMap<>();
+        cmd= new HashMap<>();
+        stack = s;
+        initCmds();
+    }
 
     public static void initCmds() {
 //        cmd.put("hist",(i) -> histRPN(i));
@@ -91,21 +86,30 @@ public class History{
         return Integer.parseInt(snum);
     }
 
-    public static void histOrPile (String s){
+    public static boolean histOrPile (String s){
         String command = s.substring(0, 4);
         int i;
         //verifie que la taille est suffisament grande pour que la commande soit bonne soit de la forme hist(x);
         if (s.length() < 7){
             System.out.println("Syntax Error");
-            return;
+            return false;
         }
         try {
             i = getNumber(s.substring(4, s.length()));
             cmd.get(command).apply(i);
         }
         catch (Exception e) {
-            return;
+            return false;
         }
+        return true;
+    }
+
+    public Boolean whichCmd(String s){
+        if (s.charAt(0) == '!' || s.charAt(0) == '?'){
+            System.out.println("not implemented");
+            return true;
+        }
+        else return histOrPile(s);
     }
 
 //************** TEMPORAIRE *****************
