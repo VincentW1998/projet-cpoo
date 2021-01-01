@@ -31,7 +31,7 @@ public class REPL {
             return RPN.Rpn(cmd, op, stack);
         if(history.isCmd(cmd))
             return history.whichCmd(cmd);
-        System.out.println("Unknown command");
+        System.out.println("Enter a double or a valid command !");
         return false;
     }
 
