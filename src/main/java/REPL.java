@@ -18,8 +18,10 @@ public class REPL {
         while(true) {
             display(); // print ">"
             String cmd = input.nextLine(); // get the line of user
-            if(checkCmd(cmd))
+            if(checkCmd(cmd)) {
+                history.save();
                 displayStack();
+            }
             else continue;
         }
     }

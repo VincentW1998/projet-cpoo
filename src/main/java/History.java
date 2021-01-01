@@ -6,47 +6,70 @@ import java.util.function.Function;
 
 
 public class History{
-    static LinkedList <Double> history;
-    static Map <String, String> valeurs;
-    static Map <String, Function <Integer,Double> > cmd;
-    static Stack <Double> stack;
+    private LinkedList <Double> history;
+    private Map <String, String> variables;
+    private Map <String, Function <Integer,Boolean> > cmd;
+    private Stack <Double> stack;
 
     public History(Stack s){
         history = new LinkedList <Double> ();
-        valeurs = new HashMap<>();
+        variables = new HashMap<>();
         cmd= new HashMap<>();
         stack = s;
         initCmds();
     }
 
-    public static void initCmds() {
-//        cmd.put("hist",(i) -> histRPN(i));
-//        cmd.put("pile",(i) -> pile(i));
+    public  void initCmds() {
+        cmd.put("hist",(i) -> {return histRPN(i); });
+        cmd.put("pile",(i) -> {return pile(i);});
 //        cmd.put("!",(c) -> store(c));
 //        cmd.put("?",(c) -> getVal(c));
-        cmd.put("hist",(i) -> {System.out.println("hist " + i); return 2.2;});
-        cmd.put("pile",(i) -> {System.out.println("pile " + i); return 2.2;});
-        cmd.put("!",(c) -> {System.out.println("store " + c) ; return 2.2;});
-        cmd.put("?",(c) -> {System.out.println("get " + c) ; return 2.2;});
+//        cmd.put("hist",(i) -> {System.out.println("hist " + i); return 2.2;});
+//        cmd.put("pile",(i) -> {System.out.println("pile " + i); return 2.2;});
+//        cmd.put("!",(c) -> {System.out.println("store " + c) ; return false;});
+//        cmd.put("?",(c) -> {System.out.println("get " + c) ; return false;});
     }
-//    public void save(double res){
-//        history.addLast(res);
-//    }
-//
-//    public void histRPN(int i) {
-//        if(!history.empty()) System.out.println("the history is empty");
-//        if(i < 0) System.out.println(history.get(history.size() - i));
-//        else System.out.println(history.get(i));
-//    }
-//
-//    public void pile(int i){
-//        Stack <String> acc = new Stack<String>();
-//        while (stack.size() - 1) acc.push(stack.pop);
-//        String d = stack.peek();
-//        System.println(d);
-//        while (!s.isEmpty()) stack.push(s.pop());
-//        stack.push(d);
-//    }
+    public void save(){
+        history.addLast(stack.peek());
+    }
+
+
+    /* ajoute le double a la pos i dans history a la fin de history
+       histOrPile se charge de l'ajouter a la pile */
+    public boolean histRPN(int i){
+        if(history.isEmpty()) {
+            System.out.println("the history is empty");
+            return false;
+        }
+        if(Math.abs(i) > stack.size()) {
+            System.out.println("index out of bounds, please select an other number");
+            return false;
+        }
+        if(i < 0){
+           stack.push(history.get(history.size() + i ));
+        }
+        else {
+            stack.push(history.get(i));
+        }
+        return true;
+    }
+
+
+    public boolean pile(int i){
+        Stack <Double> acc = new Stack<Double>();
+        int target; // la position a laquelle s'arreter
+        if(Math.abs(i) > stack.size()){
+            System.out.println("index out of bounds, please select an other number");
+            return false;
+        }
+        if(i < 0) target = stack.size() + i;
+        else target =  i;
+        while (stack.size() != target + 1) acc.push(stack.pop());
+        double d = stack.peek();
+        while (!acc.isEmpty()) stack.push(acc.pop());
+        stack.push(d);
+        return true;
+    }
 //
 //    public void store(String str){
 //        map.put(str.substring(1),stack.pop());
@@ -54,12 +77,31 @@ public class History{
 //
 //    }
 //
-//    public void pop2(){
-//        history.removeLast();
-//        history.removeLast();
-//    }
+
+
+
 
     //    ************ FILTRE ***********
+
+    public boolean isCmd(String s) {
+        if(s.equals("p")){
+            dispAll();
+            return false;
+        }
+        if (s.length() > 4) return cmd.containsKey(s.substring(0, 4));
+        return cmd.containsKey(s.substring(0, 1));
+    }
+
+    public int getNumber(String s)throws Exception { // prend un string (123) et rend 123
+        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
+            System.out.println("Syntax Error");
+            throw new Exception();
+        }
+        String snum = s.substring(1,s.length()-1);
+        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
+        return Integer.parseInt(snum);
+    }
+
     public static boolean isInteger(String s) throws NumberFormatException {
         try {
             final int v = Integer.parseInt(s);
@@ -71,22 +113,31 @@ public class History{
         }
     }
 
-    public static boolean isCmd(String s) {
-        if (s.length() > 4) return cmd.containsKey(s.substring(0, 4));
-        return cmd.containsKey(s.substring(0, 1));
-    }
 
-    public static int getNumber(String s)throws Exception { // prend un string (123) et rend 123
-        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
-            System.out.println("Syntax Error");
-            throw new Exception();
+    public Boolean whichCmd(String s){
+
+        if (s.charAt(0) == '!' || s.charAt(0) == '?'){
+            System.out.println("not implemented");
+            return true;
         }
-        String snum = s.substring(1,s.length()-1);
-        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
-        return Integer.parseInt(snum);
+        else return histOrPile(s);
     }
 
-    public static boolean histOrPile (String s){
+    public void dispAll(){
+        System.out.println("HISTORY :");
+        for(int i=0;i<history.size();i++)
+            System.out.print(history.get(i) + " | ");
+        System.out.println("\nSTACK :");
+        Stack <Double> acc = new Stack<Double>();
+        while (!stack.isEmpty())acc.push(stack.pop());
+        while (!acc.isEmpty()){
+            System.out.print(acc.peek()+ " | ");
+            stack.push(acc.pop());
+        }
+        System.out.println();
+    }
+
+    public boolean histOrPile (String s){
         String command = s.substring(0, 4);
         int i;
         //verifie que la taille est suffisament grande pour que la commande soit bonne soit de la forme hist(x);
@@ -96,48 +147,11 @@ public class History{
         }
         try {
             i = getNumber(s.substring(4, s.length()));
-            cmd.get(command).apply(i);
+            if(!cmd.get(command).apply(i)) return false;
         }
         catch (Exception e) {
             return false;
         }
         return true;
     }
-
-    public Boolean whichCmd(String s){
-        if (s.charAt(0) == '!' || s.charAt(0) == '?'){
-            System.out.println("not implemented");
-            return true;
-        }
-        else return histOrPile(s);
-    }
-
-//************** TEMPORAIRE *****************
-
-    public static void display(){
-        System.out.print("> ");
-    }
-
-//    public static void main(String[] args){
-//        initCmds();
-//
-//        Scanner input = new Scanner(System.in);
-//        Operator op = new Operator(); // initialise the map for operation
-//        while(true) {
-//            display(); // print ">"
-//            String command = input.nextLine(); // get the line of user
-//            if(isCmd(command)) {
-//
-//                    if (command.charAt(0) == '!' || command.charAt(0) == '?') System.out.println("not implemented");
-//                    else histOrPile(command);
-//            }
-//            else {
-//                System.out.println("unknown command");
-//                continue;
-//            }
-////            displayStack(stack); // print the top of the stack
-//        }
-////        input.close();
-//    }
-
 }
