@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 public class History{
     private LinkedList <Double> history;
-    private Map <String, String> variables;
-    private Map <String, Function <Integer,Boolean> > cmd;
+    private Map <String, Double> variables;
+    private Map <String, Function <String,Boolean> > cmd;
     private Stack <Double> stack;
 
     public History(Stack s){
@@ -22,8 +22,8 @@ public class History{
     public  void initCmds() {
         cmd.put("hist",(i) -> {return histRPN(i); });
         cmd.put("pile",(i) -> {return pile(i);});
-//        cmd.put("!",(c) -> store(c));
-//        cmd.put("?",(c) -> getVal(c));
+        cmd.put("!",(c) -> store(c));
+        cmd.put("?",(c) -> getVal(c));
 //        cmd.put("hist",(i) -> {System.out.println("hist " + i); return 2.2;});
 //        cmd.put("pile",(i) -> {System.out.println("pile " + i); return 2.2;});
 //        cmd.put("!",(c) -> {System.out.println("store " + c) ; return false;});
@@ -36,7 +36,8 @@ public class History{
 
     /* ajoute le double a la pos i dans history a la fin de history
        histOrPile se charge de l'ajouter a la pile */
-    public boolean histRPN(int i){
+    public boolean histRPN(String s){
+       int i = getNumber(s);
         if(history.isEmpty()) {
             System.out.println("the history is empty");
             return false;
@@ -55,7 +56,12 @@ public class History{
     }
 
 
-    public boolean pile(int i){
+    public boolean pile(String s){
+        int i = getNumber(s);
+        if(stack.isEmpty()){
+            System.out.println("the stack is empty");
+            return false;
+        }
         Stack <Double> acc = new Stack<Double>();
         int target; // la position a laquelle s'arreter
         if(Math.abs(i) > stack.size()){
@@ -70,41 +76,59 @@ public class History{
         stack.push(d);
         return true;
     }
-//
-//    public void store(String str){
-//        map.put(str.substring(1),stack.pop());
+
+    public boolean store(String str){
+        if(stack.isEmpty()){
+            System.out.println("the stack is empty");
+            return false;
+        }
+        variables.put(str,stack.pop());
+        return true;
 //        history.addLast(stack.peek());
-//
-//    }
-//
+    }
+
+    public boolean getVal(String str){
+        if(!variables.containsKey(str)){
+            System.out.println("the variable you are trying to access does not exist");
+            return false;
+        }
+        stack.push(variables.get(str));
+        return true;
+    }
 
 
 
 
-    //    ************ FILTRE ***********
 
-    public boolean isCmd(String s) {
+
+
+    //    ************ FILTRES ***********
+
+    public Boolean isCmd(String s) {
         if(s.equals("p")){
             dispAll();
             return false;
         }
+        if(cmd.containsKey(s.substring(0, 1))) return true;
         if (s.length() > 4) return cmd.containsKey(s.substring(0, 4));
-        return cmd.containsKey(s.substring(0, 1));
+        return false;
     }
 
-    public int getNumber(String s)throws Exception { // prend un string (123) et rend 123
-        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
-            System.out.println("Syntax Error");
-            throw new Exception();
-        }
+    public int getNumber(String s) { // prend un string (123) et rend 123
         String snum = s.substring(1,s.length()-1);
-        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
+//        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
         return Integer.parseInt(snum);
     }
 
     public static boolean isInteger(String s) throws NumberFormatException {
+        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
+            System.out.println("Syntax Error");
+            throw new NumberFormatException();
+//            return false;
+        }
+
         try {
-            final int v = Integer.parseInt(s);
+            final int v = Integer.parseInt(s.substring(1,s.length()-1));
             return true;
         }
         catch (Exception e) {
@@ -113,12 +137,10 @@ public class History{
         }
     }
 
-
     public Boolean whichCmd(String s){
 
         if (s.charAt(0) == '!' || s.charAt(0) == '?'){
-            System.out.println("not implemented");
-            return true;
+           return cmd.get(s.substring(0,1)).apply(s.substring(1));
         }
         else return histOrPile(s);
     }
@@ -134,7 +156,7 @@ public class History{
             System.out.print(acc.peek()+ " | ");
             stack.push(acc.pop());
         }
-        System.out.println();
+        System.out.println("\nVariables Stockes : " + variables.toString());
     }
 
     public boolean histOrPile (String s){
@@ -146,8 +168,11 @@ public class History{
             return false;
         }
         try {
-            i = getNumber(s.substring(4, s.length()));
-            if(!cmd.get(command).apply(i)) return false;
+            String arg = s.substring(4, s.length());
+            if(!isInteger(arg)) return false;
+                if(!cmd.get(command).apply(arg)) return false;
+//            i = getNumber(s.substring(4, s.length()));
+
         }
         catch (Exception e) {
             return false;
