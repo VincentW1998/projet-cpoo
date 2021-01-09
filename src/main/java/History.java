@@ -33,7 +33,8 @@ public class History{
 //        cmd.put("?",(c) -> {System.out.println("get " + c) ; return false;});
     }
     public void save(){
-        history.addLast(stack.peek());
+        if(!stack.isEmpty())
+            history.addLast(stack.peek());
     }
 
 

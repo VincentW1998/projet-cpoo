@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -6,6 +7,7 @@ public class REPL {
     private Operator op;
     private History history;
     private Algebrique algebrique;
+    private List<String> l;
 
     public REPL(Stack s){
         stack = s;
@@ -22,6 +24,7 @@ public class REPL {
             String cmd = input.nextLine(); // get the line of user
             if(checkCmd(cmd)) {
                 history.save();
+                algebrique.setVariables(history.getVariables());
                 displayStack();
             }
             else {
@@ -31,7 +34,10 @@ public class REPL {
     }
 
     public boolean checkCmd(String cmd){
-        algebrique.setLine(cmd); // set the line of user
+        algebrique.setExpression(cmd); // set the line of user
+        if(algebrique.evaluateVar("x")){
+            return true;
+        }
         if(algebrique.evaluate()) { // if the line is type algebric
             return true;
         }
@@ -51,6 +57,7 @@ public class REPL {
 
     // print the number at the top of the stack
     public void displayStack(){
-        System.out.println(stack.peek());
+        if(!stack.isEmpty())
+            System.out.println(stack.peek());
     }
 }

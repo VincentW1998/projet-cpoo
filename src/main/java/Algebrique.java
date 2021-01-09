@@ -2,10 +2,9 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.tokenizer.UnknownFunctionOrVariableException;
 
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
-public class Algebrique {
+public class Algebrique implements Parser{
     String expression; // line of user
     double result; // stock the result
     Map <String, Double> variables; // map of variables
@@ -33,11 +32,11 @@ public class Algebrique {
     public void setVariables(Map<String, Double> variables) {
         this.variables = variables;
     }
-    public String getLine() {
+    public String getExpression() {
         return expression;
     }
 
-    public void setLine(String line) {
+    public void setExpression(String line) {
         this.expression = line;
     }
 //
@@ -62,5 +61,34 @@ public class Algebrique {
             }
         }
         return false;
+    }
+
+    public boolean evaluateVar(String variable) {
+        try {
+            if(variables.containsKey(variable)) {
+                result = new ExpressionBuilder(expression)
+                        .variable(variable)
+                        .build()
+                        .setVariable(variable, variables.get(variable))
+                        .evaluate();
+                stack.push(result);
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public List<String> parser(String s) {
+        String arr[] = s.split(" ");
+        return Arrays.asList(arr);
+    }
+
+    @Override
+    public List<String> getVar(List<String> ls) {
+        return null;
     }
 }
