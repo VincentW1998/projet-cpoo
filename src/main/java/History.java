@@ -5,12 +5,18 @@ import java.util.Map;
 import java.util.function.Function;
 
 
+import java.util.LinkedList;
+import java.util.Stack;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+
 public class History{
     private LinkedList <Object> history;
     private Map <String, Object> variables;
     private Map <String, Function <String,Boolean> > cmd;
     private Stack <Object> stack;
-
 
     public History(Stack s){
         history = new LinkedList <> ();
@@ -21,10 +27,11 @@ public class History{
     }
 
     public  void initCmds() {
-        cmd.put("hist", i -> histRPN(i));
-        cmd.put("pile", i -> pile(i));
-        cmd.put("!", c -> store(c));
-        cmd.put("?", c -> getVal(c));
+        cmd.put("hist",(i) -> histRPN(i));
+        cmd.put("pile",(i) -> pile(i));
+        cmd.put("!",(c) -> store(c));
+        cmd.put("?",(c) -> getVal(c));
+
     }
     public void save(){
         if(!stack.isEmpty())
@@ -35,8 +42,7 @@ public class History{
     /* ajoute le double a la pos i dans history a la fin de history
        histOrPile se charge de l'ajouter a la pile */
     public boolean histRPN(String s){
-        System.out.println("s :"  + s);
-       int i = getNumber(s);
+        int i = getNumber(s);
         if(history.isEmpty()) {
             System.out.println("the history is empty");
             return false;
@@ -45,23 +51,11 @@ public class History{
             System.out.println("index out of bounds, please select an other number");
             return false;
         }
-
         if(i < 0){
-            try{
-                stack.push(history.get(history.size() + i ));
-            }
-            catch (Exception e) {
-                System.out.println(1);
-            }
-
+            stack.push(history.get(history.size() + i ));
         }
         else {
-            try {
-                stack.push(history.get(i));
-            }
-            catch (Exception e) {
-                System.out.println(2);
-            }
+            stack.push(history.get(i));
         }
         return true;
     }
@@ -95,6 +89,7 @@ public class History{
         }
         variables.put(str,stack.pop());
         return true;
+//        history.addLast(stack.peek());
     }
 
     public boolean getVal(String str){
@@ -126,15 +121,23 @@ public class History{
 
     public int getNumber(String s) { // prend un string (123) et rend 123
         String snum = s.substring(1,s.length()-1);
+//        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
         return Integer.parseInt(snum);
     }
 
     public static boolean isInteger(String s) throws NumberFormatException {
+        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
+            System.out.println("Syntax Error");
+            throw new NumberFormatException();
+//            return false;
+        }
+
         try {
-            final int v = Integer.parseInt(s);
+            final int v = Integer.parseInt(s.substring(1,s.length()-1));
             return true;
         }
         catch (Exception e) {
+            System.out.println("Illegal argument, please type a number");
             return false;
         }
     }
@@ -142,7 +145,7 @@ public class History{
     public Boolean whichCmd(String s){
 
         if (s.charAt(0) == '!' || s.charAt(0) == '?'){
-           return cmd.get(s.substring(0,1)).apply(s.substring(1));
+            return cmd.get(s.substring(0,1)).apply(s.substring(1));
         }
         else return histOrPile(s);
     }
@@ -166,48 +169,21 @@ public class History{
         int i;
         //verifie que la taille est suffisament grande pour que la commande soit bonne soit de la forme hist(x);
         if (s.length() < 7){
-            System.out.println("Syntax Error 1");
+            System.out.println("Syntax Error");
             return false;
         }
         try {
             String arg = s.substring(4, s.length());
-            if(arg.charAt(0) != '(' || arg.charAt(arg.length() - 1) != ')') { // on verifie que la commande est bien parenthesé
-                System.out.println("Syntax Error 2");
-                return false;
-            }
-            arg = arg.substring(1,arg.length()-1); // on retire les parenteses
+            if(!isInteger(arg)) return false;
+            if(!cmd.get(command).apply(arg)) return false;
+//            i = getNumber(s.substring(4, s.length()));
 
-            if(!isInteger(arg)){
-                System.out.println("Illegal argument, please type a number");
-                return false;
-            }
-            if(!cmd.get(command).apply(arg)) {
-                return false;
-            }
         }
         catch (Exception e) {
             return false;
         }
         return true;
     }
-//    public boolean histOrPile (String s){
-//        String command = s.substring(0, 4);
-//        int i;
-//        //verifie que la taille est suffisament grande pour que la commande soit bonne soit de la forme hist(x);
-//        if (s.length() < 7){
-//            System.out.println("Syntax Error");
-//            return false;
-//        }
-//        try {
-//            String arg = s.substring(4, s.length());
-//            if(!isInteger(arg)) return false;
-//            if(!cmd.get(command).apply(arg)) return false;
-////            i = getNumber(s.substring(4, s.length()));
-//
-//        }
-//        catch (Exception e) {
-//            return false;
-//        }
-//        return true;
-//    }
 }
+
+
