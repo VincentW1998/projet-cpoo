@@ -121,18 +121,11 @@ public class History{
     }
 
     public static boolean isInteger(String s) throws NumberFormatException {
-        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
-            System.out.println("Syntax Error");
-            throw new NumberFormatException();
-//            return false;
-        }
-
         try {
-            final int v = Integer.parseInt(s.substring(1,s.length()-1));
+            final int v = Integer.parseInt(s);
             return true;
         }
         catch (Exception e) {
-            System.out.println("Illegal argument, please type a number");
             return false;
         }
     }
@@ -169,10 +162,16 @@ public class History{
         }
         try {
             String arg = s.substring(4, s.length());
-            if(!isInteger(arg)) return false;
-                if(!cmd.get(command).apply(arg)) return false;
-//            i = getNumber(s.substring(4, s.length()));
-
+            if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') { // on verifie que la commande est bien parenthesé
+                System.out.println("Syntax Error");
+                return false;
+            }
+            arg = arg.substring(1,arg.length()-1); // on retire les parenteses
+            if(!isInteger(arg)){
+                System.out.println("Illegal argument, please type a number");
+                return false;
+            }
+            if(!cmd.get(command).apply(arg)) return false;
         }
         catch (Exception e) {
             return false;

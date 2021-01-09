@@ -19,7 +19,7 @@ public class REPL {
             display(); // print ">"
             String cmd = input.nextLine(); // get the line of user
             if(checkCmd(cmd)) {
-                history.save();
+//                history.save();
                 displayStack();
             }
             else continue;
@@ -27,7 +27,7 @@ public class REPL {
     }
 
     public boolean checkCmd(String cmd){
-        if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd))
+        if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd) || cmd.charAt(0) == '$' || cmd.equals("subst"))
             return RPN.Rpn(cmd, op, stack);
         if(history.isCmd(cmd))
             return history.whichCmd(cmd);
@@ -43,6 +43,11 @@ public class REPL {
 
     // print the number at the top of the stack
     public void displayStack(){
-        System.out.println(stack.peek());
+        if(stack.peek() instanceof Variable){
+            System.out.println( stack.peek().toString());
+        }
+        else{
+            System.out.println(stack.peek());
+        }
     }
 }
