@@ -3,8 +3,8 @@ import java.util.Map;
 
 public class Expression {
   private Map<String,Object> operands;
-  String Operator;
-  Operator op;
+    String Operator;
+    Operator op;
   public Expression(Object x, Object y, String o)  {
       operands = new HashMap<>();
       operands.put("x",x);
@@ -56,18 +56,18 @@ public class Expression {
     @Override
     public String toString(){
         String str = "(";
-        Object x = operands.get("x");
-        Object y = operands.get("y");
+        Object x = operands.get("x"); // first element
+        Object y = operands.get("y"); // second
 
-        if(x instanceof Variable) str += ((Variable) x).getName();
-        else if (x instanceof Expression) str += x.toString();
-        else if(x instanceof Double) str += RPN.doubleToString((Double) x);
+        if(x instanceof Variable) str += ((Variable) x).getName(); //value of first
+        else if (x instanceof Expression) str += x.toString(); //string of value of first
+        else str += RPN.doubleToString(x);
 
         str += Operator;
 
         if(y instanceof Variable) str += ((Variable) y).getName();
         else if (y instanceof Expression) str += y.toString();
-        else if(x instanceof Double) str += RPN.doubleToString((Double) y);
+        else str += RPN.doubleToString(y);
         return str + ")";
     }
 

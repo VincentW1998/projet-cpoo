@@ -21,10 +21,10 @@ public class History{
     }
 
     public  void initCmds() {
-        cmd.put("hist",(i) -> {return histRPN(i); });
-        cmd.put("pile",(i) -> {return pile(i);});
-        cmd.put("!",(c) -> store(c));
-        cmd.put("?",(c) -> getVal(c));
+        cmd.put("hist", i -> histRPN(i));
+        cmd.put("pile", i -> pile(i));
+        cmd.put("!", c -> store(c));
+        cmd.put("?", c -> getVal(c));
     }
     public void save(){
         if(!stack.isEmpty())
@@ -35,6 +35,7 @@ public class History{
     /* ajoute le double a la pos i dans history a la fin de history
        histOrPile se charge de l'ajouter a la pile */
     public boolean histRPN(String s){
+        System.out.println("s :"  + s);
        int i = getNumber(s);
         if(history.isEmpty()) {
             System.out.println("the history is empty");
@@ -44,11 +45,23 @@ public class History{
             System.out.println("index out of bounds, please select an other number");
             return false;
         }
+
         if(i < 0){
-           stack.push(history.get(history.size() + i ));
+            try{
+                stack.push(history.get(history.size() + i ));
+            }
+            catch (Exception e) {
+                System.out.println(1);
+            }
+
         }
         else {
-            stack.push(history.get(i));
+            try {
+                stack.push(history.get(i));
+            }
+            catch (Exception e) {
+                System.out.println(2);
+            }
         }
         return true;
     }
@@ -153,21 +166,24 @@ public class History{
         int i;
         //verifie que la taille est suffisament grande pour que la commande soit bonne soit de la forme hist(x);
         if (s.length() < 7){
-            System.out.println("Syntax Error");
+            System.out.println("Syntax Error 1");
             return false;
         }
         try {
             String arg = s.substring(4, s.length());
-            if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') { // on verifie que la commande est bien parenthesé
-                System.out.println("Syntax Error");
+            if(arg.charAt(0) != '(' || arg.charAt(arg.length() - 1) != ')') { // on verifie que la commande est bien parenthesé
+                System.out.println("Syntax Error 2");
                 return false;
             }
             arg = arg.substring(1,arg.length()-1); // on retire les parenteses
+
             if(!isInteger(arg)){
                 System.out.println("Illegal argument, please type a number");
                 return false;
             }
-            if(!cmd.get(command).apply(arg)) return false;
+            if(!cmd.get(command).apply(arg)) {
+                return false;
+            }
         }
         catch (Exception e) {
             return false;
