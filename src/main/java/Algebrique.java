@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Stack;
 
 public class Algebrique {
-    String line; // line of user
+    String expression; // line of user
     double result; // stock the result
     Map <String, Double> variables; // map of variables
     private Stack<Double> stack; // stack of result
@@ -34,11 +34,11 @@ public class Algebrique {
         this.variables = variables;
     }
     public String getLine() {
-        return line;
+        return expression;
     }
 
     public void setLine(String line) {
-        this.line = line;
+        this.expression = line;
     }
 //
 //    Function multipleVar = new Function("multipleVar", variables.size()) {
@@ -50,15 +50,17 @@ public class Algebrique {
 
     // evaluate the algebric calculus without variables
     public boolean evaluate()  throws UnknownFunctionOrVariableException {
-        try {
-            result = new ExpressionBuilder(line)
-                    .build().evaluate();
-            stack.push(result);
-            return true;
+        if (expression.length() > 1) { // if the length > 1 we can evaluate this expression
+            try {
+                result = new ExpressionBuilder(expression)
+                        .build().evaluate();
+                stack.push(result);
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
         }
-        catch (Exception e) {
-            return false;
-        }
-
+        return false;
     }
 }
