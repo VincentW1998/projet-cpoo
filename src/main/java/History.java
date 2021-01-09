@@ -89,7 +89,6 @@ public class History{
         }
         variables.put(str,stack.pop());
         return true;
-//        history.addLast(stack.peek());
     }
 
     public boolean getVal(String str){
@@ -100,11 +99,6 @@ public class History{
         stack.push(variables.get(str));
         return true;
     }
-
-
-
-
-
 
 
     //    ************ FILTRES ***********
@@ -121,7 +115,6 @@ public class History{
 
     public int getNumber(String s) { // prend un string (123) et rend 123
         String snum = s.substring(1,s.length()-1);
-//        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
         return Integer.parseInt(snum);
     }
 
@@ -129,7 +122,6 @@ public class History{
         if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
             System.out.println("Syntax Error");
             throw new NumberFormatException();
-//            return false;
         }
 
         try {
@@ -176,8 +168,6 @@ public class History{
             String arg = s.substring(4, s.length());
             if(!isInteger(arg)) return false;
             if(!cmd.get(command).apply(arg)) return false;
-//            i = getNumber(s.substring(4, s.length()));
-
         }
         catch (Exception e) {
             return false;
