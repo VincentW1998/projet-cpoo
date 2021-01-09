@@ -37,6 +37,7 @@ public class RPN {
     }
 
     public static boolean substitute(Stack <Object> stack){
+        Algebrique alge = new Algebrique(stack);
         Object where = stack.pop();
         if(!(where instanceof Variable)){
             System.out.println("you cannot use subst, previous output is not a variable");
@@ -53,12 +54,12 @@ public class RPN {
             System.out.println("the variable does not exist");
             return false;
         }
-//        if(((Operation) target).containsSymbVar())
-//            stack.push(target);
-//        else{
-//
-//        }
-        stack.push(target);
+        if(((Expression) target).containsSymbVar())
+            stack.push(target);
+        else{
+            alge.setExpression(target.toString());
+            alge.evaluate();
+        }
         return true;
     }
 
@@ -82,8 +83,7 @@ public class RPN {
         Object x = stack.pop(); // take the first element
         if(x instanceof Double && y instanceof Double) {
             Double res = op.op_map.get(operator).apply((Double) x, (Double) y); // result of the operation between 2 numbers
-            String result = doubleToString(res);
-            stack.push(result); // push the result at the top of stack
+            stack.push(res); // push the result at the top of stack
             return true;
         }
         Expression o = new Expression(x,y,operator);
@@ -115,7 +115,7 @@ public class RPN {
     }
 
     // change double to string
-    public static String doubleToString(double d) {
+    public static String doubleToString(Object d) {
         return String.valueOf(d);
     }
 
