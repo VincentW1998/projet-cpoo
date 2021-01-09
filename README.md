@@ -68,6 +68,7 @@ Aller dans le dossier calculatrice et exécutez le fichier run
 
 Notre calculatrice a les implementations suivantes :
 
+* une commande `p` qui affiche le contenu de la pile, l'historique et les variables stockees
 * Syntaxe polonaise inversee, fonctionne operandes/operateurs sur chaque ligne par exemple
     * \> 3
     * 3
