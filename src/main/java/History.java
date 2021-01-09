@@ -190,4 +190,24 @@ public class History{
         }
         return true;
     }
+//    public boolean histOrPile (String s){
+//        String command = s.substring(0, 4);
+//        int i;
+//        //verifie que la taille est suffisament grande pour que la commande soit bonne soit de la forme hist(x);
+//        if (s.length() < 7){
+//            System.out.println("Syntax Error");
+//            return false;
+//        }
+//        try {
+//            String arg = s.substring(4, s.length());
+//            if(!isInteger(arg)) return false;
+//            if(!cmd.get(command).apply(arg)) return false;
+////            i = getNumber(s.substring(4, s.length()));
+//
+//        }
+//        catch (Exception e) {
+//            return false;
+//        }
+//        return true;
+//    }
 }
