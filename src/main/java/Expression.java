@@ -4,13 +4,11 @@ import java.util.Map;
 public class Expression {
   private Map<String,Object> operands;
     String Operator;
-    Operator op;
   public Expression(Object x, Object y, String o)  {
       operands = new HashMap<>();
       operands.put("x",x);
       operands.put("y",y);
       Operator = o;
-      op = new Operator();
   }
 
   public void setX(Object x){
@@ -21,6 +19,7 @@ public class Expression {
       operands.replace("y",y);
   }
 
+  /* check si l'expression contiens une variable symbolique */
   public boolean containsSymbVar(){
       Object x = operands.get("x");
       Object y = operands.get("y");
@@ -32,6 +31,7 @@ public class Expression {
       return false;
   }
 
+  /* effectue la substitution */
   public boolean subt(Variable v, Object value){
       Object x = operands.get("x");
       Object y = operands.get("y");
@@ -59,13 +59,13 @@ public class Expression {
         Object x = operands.get("x"); // first element
         Object y = operands.get("y"); // second
 
-        if(x instanceof Variable) str += ((Variable) x).getName(); //value of first
+        if(x instanceof Variable) str += ((Variable) x).getName(); //value of first operand
         else if (x instanceof Expression) str += x.toString(); //string of value of first
         else str += RPN.doubleToString(x);
 
         str += Operator;
 
-        if(y instanceof Variable) str += ((Variable) y).getName();
+        if(y instanceof Variable) str += ((Variable) y).getName(); // value of second operand
         else if (y instanceof Expression) str += y.toString();
         else str += RPN.doubleToString(y);
         return str + ")";

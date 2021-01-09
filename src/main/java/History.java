@@ -4,18 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-
-import java.util.LinkedList;
-import java.util.Stack;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-
 public class History{
-    private LinkedList <Object> history;
-    private Map <String, Object> variables;
-    private Map <String, Function <String,Boolean> > cmd;
+    private LinkedList <Object> history; //history containing the passed values
+    private Map <String, Object> variables; // list of saved variables
+    private Map <String, Function <String,Boolean> > cmd; //list of commands
     private Stack <Object> stack;
 
     public History(Stack s){
@@ -26,14 +18,14 @@ public class History{
         initCmds();
     }
 
-    public  void initCmds() {
+    public  void initCmds() { //addition of functions to be applied when called uppon
         cmd.put("hist",(i) -> histRPN(i));
         cmd.put("pile",(i) -> pile(i));
         cmd.put("!",(c) -> store(c));
         cmd.put("?",(c) -> getVal(c));
 
     }
-    public void save(){
+    public void save(){ // save to history
         if(!stack.isEmpty())
             history.addLast(stack.peek());
     }
@@ -60,7 +52,7 @@ public class History{
         return true;
     }
 
-
+    /* ajoute l'element a la position s au sommet de la pile */
     public boolean pile(String s){
         int i = getNumber(s);
         if(stack.isEmpty()){
@@ -82,6 +74,7 @@ public class History{
         return true;
     }
 
+    /* sauvegarde la valeur au sommet de la pile dans une variable nomme "str" */
     public boolean store(String str){
         if(stack.isEmpty()){
             System.out.println("the stack is empty");
@@ -91,6 +84,7 @@ public class History{
         return true;
     }
 
+    /* affiche une variable sauvegarder*/
     public boolean getVal(String str){
         if(!variables.containsKey(str)){
             System.out.println("the variable you are trying to access does not exist");
@@ -103,6 +97,7 @@ public class History{
 
     //    ************ FILTRES ***********
 
+    /* check si c'est une des commande acceptés par l'historique */
     public Boolean isCmd(String s) {
         if(s.equals("p")){
             dispAll();
@@ -113,13 +108,15 @@ public class History{
         return false;
     }
 
-    public int getNumber(String s) { // prend un string (123) et rend 123
+    /* prend un string (123) et rend 123 */
+    public int getNumber(String s) {
         String snum = s.substring(1,s.length()-1);
         return Integer.parseInt(snum);
     }
 
+
     public static boolean isInteger(String s) throws NumberFormatException {
-        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
+        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') { // verifie qu'il y a bien 1 parentese au debut et la fin de l'argument
             System.out.println("Syntax Error");
             throw new NumberFormatException();
         }
@@ -134,14 +131,15 @@ public class History{
         }
     }
 
+    //appelle soit les fonctions de sauvegarde de variables !? soit hist/pile
     public Boolean whichCmd(String s){
-
         if (s.charAt(0) == '!' || s.charAt(0) == '?'){
             return cmd.get(s.substring(0,1)).apply(s.substring(1));
         }
         else return histOrPile(s);
     }
 
+    // affiche le contenu de l'historique, de la liste de variables ainsi que le contenu de la pile
     public void dispAll(){
         System.out.println("HISTORY :");
         for(int i=0;i<history.size();i++)
@@ -156,6 +154,7 @@ public class History{
         System.out.println("\nVariables Stockes : " + variables.toString());
     }
 
+    /* check quel commande est appelé */
     public boolean histOrPile (String s){
         String command = s.substring(0, 4);
         int i;

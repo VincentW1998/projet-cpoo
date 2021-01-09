@@ -36,6 +36,7 @@ public class RPN {
         return false;
     }
 
+    /* effectue une substitution sur target */
     public static boolean substitute(Stack <Object> stack){
         Algebrique alge = new Algebrique(stack);
         Object where = stack.pop();
@@ -63,7 +64,7 @@ public class RPN {
         return true;
     }
 
-
+    /* ajoute un variable symbolique a la pile */
     public static boolean addSymbVar(String var,Stack <Object> stack){
         if(var.length() > 1){
             String variable = var.substring(1);
@@ -78,6 +79,7 @@ public class RPN {
         return false;
     }
 
+    // evalue le calcul
     public static boolean calculate(String operator, Operator op, Stack <Object> stack){
         Object y = stack.pop(); // take the second element
         Object x = stack.pop(); // take the first element
