@@ -33,11 +33,11 @@ public class Algebrique {
     public void setVariables(Map<String, Double> variables) {
         this.variables = variables;
     }
-    public String getLine() {
+    public String getExpression() {
         return expression;
     }
 
-    public void setLine(String line) {
+    public void setExpression(String line) {
         this.expression = line;
     }
 //
@@ -62,5 +62,20 @@ public class Algebrique {
             }
         }
         return false;
+    }
+
+    public boolean evaluateVar(String variable, double valeur) {
+        try {
+            result = new ExpressionBuilder(expression)
+                    .variable(variable)
+                    .build()
+                    .setVariable(variable, valeur)
+                    .evaluate();
+            stack.push(result);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 }
