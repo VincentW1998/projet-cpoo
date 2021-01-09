@@ -6,32 +6,24 @@ import java.util.*;
 
 public class Algebrique implements Parser{
     String expression; // line of user
-    double result; // stock the result
-    Map <String, Double> variables; // map of variables
-    private Stack<Double> stack; // stack of result
+    Object result; // stock the result
+    private Stack<Object> stack; // stack of result
 
 
     /* CONSTRUCTOR */
-    Algebrique(Stack<Double> s) { //package-private
+    Algebrique(Stack<Object> s) { //package-private
         this.stack = s;
     }
 
     /* GETTERS && SETTERS */
-    public double getResult() {
+    public Object getResult() {
         return result;
     }
 
-    public Map<String, Double> getVariables() {
-        return variables;
-    }
-
-    public void setResult(double result) {
+    public void setResult(Object result) {
         this.result = result;
     }
 
-    public void setVariables(Map<String, Double> variables) {
-        this.variables = variables;
-    }
     public String getExpression() {
         return expression;
     }
@@ -39,13 +31,6 @@ public class Algebrique implements Parser{
     public void setExpression(String line) {
         this.expression = line;
     }
-//
-//    Function multipleVar = new Function("multipleVar", variables.size()) {
-//        @Override
-//        public double apply(double... args) {
-//
-//        }
-//    }
 
     // evaluate the algebric calculus without variables
     public boolean evaluate()  throws UnknownFunctionOrVariableException {
@@ -63,23 +48,23 @@ public class Algebrique implements Parser{
         return false;
     }
 
-    public boolean evaluateVar(String variable) {
-        try {
-            if(variables.containsKey(variable)) {
-                result = new ExpressionBuilder(expression)
-                        .variable(variable)
-                        .build()
-                        .setVariable(variable, variables.get(variable))
-                        .evaluate();
-                stack.push(result);
-                return true;
-            }
-            return false;
-        }
-        catch (Exception e) {
-            return false;
-        }
-    }
+//    public boolean evaluateVar(String variable) {
+//        try {
+//            if(variables.containsKey(variable)) {
+//                result = new ExpressionBuilder(expression)
+//                        .variable(variable)
+//                        .build()
+//                        .setVariable(variable, variables.get(variable))
+//                        .evaluate();
+//                stack.push(result);
+//                return true;
+//            }
+//            return false;
+//        }
+//        catch (Exception e) {
+//            return false;
+//        }
+//    }
 
     @Override
     public List<String> parser(String s) {

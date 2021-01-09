@@ -11,9 +11,7 @@ public class History{
     private Map <String, Function <String,Boolean> > cmd;
     private Stack <Object> stack;
 
-    public Map<String, Double> getVariables() {
-        return variables;
-    }
+
     public History(Stack s){
         history = new LinkedList <> ();
         variables = new HashMap<>();

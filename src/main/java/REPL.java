@@ -24,7 +24,6 @@ public class REPL {
             String cmd = input.nextLine(); // get the line of user
             if(checkCmd(cmd)) {
                 history.save();
-                algebrique.setVariables(history.getVariables());
                 displayStack();
             }
             else {
@@ -34,6 +33,10 @@ public class REPL {
     }
 
     public boolean checkCmd(String cmd){
+        algebrique.setExpression(cmd);
+        if(algebrique.evaluate()) {
+            return true;
+        }
         if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd) || cmd.charAt(0) == '$' || cmd.equals("subst"))
             return RPN.Rpn(cmd, op, stack);
         if(history.isCmd(cmd))
@@ -50,11 +53,13 @@ public class REPL {
 
     // print the number at the top of the stack
     public void displayStack(){
-        if(stack.peek() instanceof Variable){
-            System.out.println( stack.peek().toString());
-        }
-        else{
-            System.out.println(stack.peek());
+        if(!stack.isEmpty()) {
+            if(stack.peek() instanceof Variable){
+                System.out.println( stack.peek().toString());
+            }
+            else{
+                System.out.println(stack.peek());
+            }
         }
     }
 }
