@@ -21,21 +21,6 @@ public class Expression {
       operands.replace("y",y);
   }
 
-  public boolean contains(Variable v){
-      Object x = operands.get("x");
-      Object y = operands.get("y");
-      if(x instanceof Variable)
-          if(((Variable)x).getName().equals(v.getName())) return true;
-      if(x instanceof Expression)
-          if (((Expression) x).contains(v)) return true;
-
-      if(y instanceof Variable)
-          if(((Variable)y).getName().equals(v.getName())) return true;
-      if(y instanceof Expression)
-          if(((Expression) y).contains(v)) return true;
-      return false;
-  }
-
   public boolean containsSymbVar(){
       Object x = operands.get("x");
       Object y = operands.get("y");

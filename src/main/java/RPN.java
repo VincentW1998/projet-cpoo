@@ -49,7 +49,6 @@ public class RPN {
             System.out.println("there is no expression to subtitute");
             return false;
         }
-//        if(!((Operation)target).contains((Variable)where)) return false;
         if(!((Expression)target).subt((Variable)where, value)){
             System.out.println("the variable does not exist");
             return false;
@@ -106,7 +105,6 @@ public class RPN {
             return true;
         }
         catch (Exception e) {
-//            System.out.println("Please type a double");
             return false;
         }
     }

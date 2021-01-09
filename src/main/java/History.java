@@ -25,10 +25,6 @@ public class History{
         cmd.put("pile",(i) -> {return pile(i);});
         cmd.put("!",(c) -> store(c));
         cmd.put("?",(c) -> getVal(c));
-//        cmd.put("hist",(i) -> {System.out.println("hist " + i); return 2.2;});
-//        cmd.put("pile",(i) -> {System.out.println("pile " + i); return 2.2;});
-//        cmd.put("!",(c) -> {System.out.println("store " + c) ; return false;});
-//        cmd.put("?",(c) -> {System.out.println("get " + c) ; return false;});
     }
     public void save(){
         if(!stack.isEmpty())
@@ -64,7 +60,7 @@ public class History{
             System.out.println("the stack is empty");
             return false;
         }
-        Stack <Object> acc = new Stack<Object>();
+        Stack <Object> acc = new Stack<>();
         int target; // la position a laquelle s'arreter
         if(Math.abs(i) > stack.size()){
             System.out.println("index out of bounds, please select an other number");
@@ -86,7 +82,6 @@ public class History{
         }
         variables.put(str,stack.pop());
         return true;
-//        history.addLast(stack.peek());
     }
 
     public boolean getVal(String str){
@@ -118,7 +113,6 @@ public class History{
 
     public int getNumber(String s) { // prend un string (123) et rend 123
         String snum = s.substring(1,s.length()-1);
-//        if(!isInteger(snum)) throw new Exception(); //check si l'argument est bien un int
         return Integer.parseInt(snum);
     }
 
