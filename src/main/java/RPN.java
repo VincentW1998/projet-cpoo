@@ -67,7 +67,7 @@ public class RPN {
     public static boolean addSymbVar(String var,Stack <Object> stack){
         if(var.length() > 1){
             String variable = var.substring(1);
-            if(History.isInteger(variable) || isDouble(variable)){
+            if(isInteger(variable) || isDouble(variable)){
                 System.out.println("you cannot use an integer or a double as a variable name, only strings are autorised");
                 return false;
             }
@@ -119,5 +119,13 @@ public class RPN {
         return String.valueOf(d);
     }
 
-
+    public static boolean isInteger(String s) throws NumberFormatException {
+        try {
+            final int v = Integer.parseInt(s);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
 }
