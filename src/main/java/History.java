@@ -11,6 +11,9 @@ public class History{
     private Map <String, Function <String,Boolean> > cmd;
     private Stack <Object> stack;
 
+    public Map<String, Double> getVariables() {
+        return variables;
+    }
     public History(Stack s){
         history = new LinkedList <> ();
         variables = new HashMap<>();
@@ -30,7 +33,8 @@ public class History{
 //        cmd.put("?",(c) -> {System.out.println("get " + c) ; return false;});
     }
     public void save(){
-        history.addLast(stack.peek());
+        if(!stack.isEmpty())
+            history.addLast(stack.peek());
     }
 
 

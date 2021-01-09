@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -5,11 +6,14 @@ public class REPL {
     private Stack stack;
     private Operator op;
     private History history;
+    private Algebrique algebrique;
+    private List<String> l;
 
     public REPL(Stack s){
         stack = s;
         op = new Operator(); // initialise the map for operation
         history = new History(stack);
+        algebrique = new Algebrique(stack);
     }
 
     // Lancement de la boucle interactive
@@ -20,9 +24,12 @@ public class REPL {
             String cmd = input.nextLine(); // get the line of user
             if(checkCmd(cmd)) {
                 history.save();
+                algebrique.setVariables(history.getVariables());
                 displayStack();
             }
-            else continue;
+            else {
+                continue;
+            }
         }
     }
 
