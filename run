@@ -1,0 +1,4 @@
+#!/bin/bash
+source ~/.bash_profile
+mvn clean compile assembly:single
+mvn exec:java -Dexec.mainClass=Main
