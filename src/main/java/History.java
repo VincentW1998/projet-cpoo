@@ -6,16 +6,16 @@ import java.util.function.Function;
 
 
 public class History{
-    private LinkedList <Double> history;
-    private Map <String, Double> variables;
+    private LinkedList <Object> history;
+    private Map <String, Object> variables;
     private Map <String, Function <String,Boolean> > cmd;
-    private Stack <Double> stack;
+    private Stack <Object> stack;
 
     public Map<String, Double> getVariables() {
         return variables;
     }
     public History(Stack s){
-        history = new LinkedList <Double> ();
+        history = new LinkedList <> ();
         variables = new HashMap<>();
         cmd= new HashMap<>();
         stack = s;
@@ -66,7 +66,7 @@ public class History{
             System.out.println("the stack is empty");
             return false;
         }
-        Stack <Double> acc = new Stack<Double>();
+        Stack <Object> acc = new Stack<Object>();
         int target; // la position a laquelle s'arreter
         if(Math.abs(i) > stack.size()){
             System.out.println("index out of bounds, please select an other number");
@@ -75,7 +75,7 @@ public class History{
         if(i < 0) target = stack.size() + i;
         else target =  i;
         while (stack.size() != target + 1) acc.push(stack.pop());
-        double d = stack.peek();
+        Object d = stack.peek();
         while (!acc.isEmpty()) stack.push(acc.pop());
         stack.push(d);
         return true;
@@ -125,18 +125,11 @@ public class History{
     }
 
     public static boolean isInteger(String s) throws NumberFormatException {
-        if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') {
-            System.out.println("Syntax Error");
-            throw new NumberFormatException();
-//            return false;
-        }
-
         try {
-            final int v = Integer.parseInt(s.substring(1,s.length()-1));
+            final int v = Integer.parseInt(s);
             return true;
         }
         catch (Exception e) {
-            System.out.println("Illegal argument, please type a number");
             return false;
         }
     }
@@ -154,7 +147,7 @@ public class History{
         for(int i=0;i<history.size();i++)
             System.out.print(history.get(i) + " | ");
         System.out.println("\nSTACK :");
-        Stack <Double> acc = new Stack<Double>();
+        Stack <Object> acc = new Stack<>();
         while (!stack.isEmpty())acc.push(stack.pop());
         while (!acc.isEmpty()){
             System.out.print(acc.peek()+ " | ");
@@ -173,10 +166,16 @@ public class History{
         }
         try {
             String arg = s.substring(4, s.length());
-            if(!isInteger(arg)) return false;
-                if(!cmd.get(command).apply(arg)) return false;
-//            i = getNumber(s.substring(4, s.length()));
-
+            if(s.charAt(0) != '(' || s.charAt(s.length() - 1) != ')') { // on verifie que la commande est bien parenthesé
+                System.out.println("Syntax Error");
+                return false;
+            }
+            arg = arg.substring(1,arg.length()-1); // on retire les parenteses
+            if(!isInteger(arg)){
+                System.out.println("Illegal argument, please type a number");
+                return false;
+            }
+            if(!cmd.get(command).apply(arg)) return false;
         }
         catch (Exception e) {
             return false;

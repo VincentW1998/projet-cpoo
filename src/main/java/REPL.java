@@ -34,14 +34,7 @@ public class REPL {
     }
 
     public boolean checkCmd(String cmd){
-        algebrique.setExpression(cmd); // set the line of user
-        if(algebrique.evaluateVar("x")){
-            return true;
-        }
-        if(algebrique.evaluate()) { // if the line is type algebric
-            return true;
-        }
-       if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd))
+        if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd) || cmd.charAt(0) == '$' || cmd.equals("subst"))
             return RPN.Rpn(cmd, op, stack);
         if(history.isCmd(cmd))
             return history.whichCmd(cmd);
@@ -57,7 +50,11 @@ public class REPL {
 
     // print the number at the top of the stack
     public void displayStack(){
-        if(!stack.isEmpty())
+        if(stack.peek() instanceof Variable){
+            System.out.println( stack.peek().toString());
+        }
+        else{
             System.out.println(stack.peek());
+        }
     }
 }
