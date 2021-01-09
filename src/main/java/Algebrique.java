@@ -1,15 +1,21 @@
 import net.objecthunter.exp4j.ExpressionBuilder;
+import net.objecthunter.exp4j.tokenizer.UnknownFunctionOrVariableException;
 
 import java.util.Map;
+import java.util.Stack;
 
 public class Algebrique {
-    String line;
-    double result;
-    Map <String, Double> variables;
+    String line; // line of user
+    double result; // stock the result
+    Map <String, Double> variables; // map of variables
+    private Stack<Double> stack; // stack of result
 
-    Algebrique() {
+    /* CONSTRUCTOR */
+    Algebrique(Stack<Double> s) { //package-private
+        this.stack = s;
     }
 
+    /* GETTERS && SETTERS */
     public double getResult() {
         return result;
     }
@@ -32,17 +38,18 @@ public class Algebrique {
     public void setLine(String line) {
         this.line = line;
     }
-    public void testExpressionBuilder1(){
-        double result = new ExpressionBuilder("cos(x)")
-                .variable("x")
-                .build()
-                .setVariable("x", Math.PI)
-                .evaluate();
-        double expected = Math.cos(Math.PI);
-    }
 
-    public void evaluate() {
-        result = new ExpressionBuilder(line)
-                .build().evaluate();
+    // evaluate the algebric calculus without variables
+    public boolean evaluate()  throws UnknownFunctionOrVariableException {
+        try {
+            result = new ExpressionBuilder(line)
+                    .build().evaluate();
+            stack.push(result);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+
     }
 }
