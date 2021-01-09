@@ -5,11 +5,13 @@ public class REPL {
     private Stack stack;
     private Operator op;
     private History history;
+    private Algebrique algebrique;
 
     public REPL(Stack s){
         stack = s;
         op = new Operator(); // initialise the map for operation
         history = new History(stack);
+        algebrique = new Algebrique();
     }
 
     // Lancement de la boucle interactive
@@ -22,7 +24,14 @@ public class REPL {
                 history.save();
                 displayStack();
             }
-            else continue;
+            else {
+                algebrique.setLine(cmd);
+                algebrique.setVariables(history.getVariables());
+                algebrique.evaluate();
+                stack.push(algebrique.getResult());
+                displayStack();
+                continue;
+            }
         }
     }
 
