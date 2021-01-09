@@ -32,7 +32,7 @@ public class REPL {
 
     public boolean checkCmd(String cmd){
         algebrique.setLine(cmd); // set the line of user
-        if(algebrique.evaluate()) { // if the line is type algebric
+        if(algebrique.evaluate() && cmd.length() > 1) { // if the line is type algebric
             return true;
         }
        if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd))
