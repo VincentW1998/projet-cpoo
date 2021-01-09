@@ -64,4 +64,19 @@ Si vous ètes sous MacOs lancez maven avec la commande:
 Aller dans le dossier calculatrice et exécutez le fichier run
 *  `./run`
 
+## Implementation 
 
+Notre calculatrice a les implementations suivantes :
+
+* Syntaxe polonaise inversee, fonctionne operandes/operateurs sur chaque ligne par exemple
+    * \> 3
+    * 3
+    * \> 4
+    * 4
+    * \> +
+    * 7
+* L'extension 2 : Syntaxe algebrique fonctionne ligne par ligne :
+    * \> (2 * 3) + (4 * 5)
+    * 26
+* l'Extension 3 : rappels de valeurs avec les commandes `hist`, `pile`, `!x` et `?x`
+* l'Extension 4 : calculatrice symbolique avec les commandes `$x` et `subst`
