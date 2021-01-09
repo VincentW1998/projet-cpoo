@@ -11,7 +11,7 @@ public class REPL {
         stack = s;
         op = new Operator(); // initialise the map for operation
         history = new History(stack);
-        algebrique = new Algebrique();
+        algebrique = new Algebrique(stack);
     }
 
     // Lancement de la boucle interactive
@@ -25,18 +25,17 @@ public class REPL {
                 displayStack();
             }
             else {
-                algebrique.setLine(cmd);
-                algebrique.setVariables(history.getVariables());
-                algebrique.evaluate();
-                stack.push(algebrique.getResult());
-                displayStack();
                 continue;
             }
         }
     }
 
     public boolean checkCmd(String cmd){
-        if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd))
+        algebrique.setLine(cmd); // set the line of user
+        if(algebrique.evaluate() && cmd.length() > 1) { // if the line is type algebric
+            return true;
+        }
+       if(RPN.isOperator(cmd, op) || RPN.isDouble(cmd))
             return RPN.Rpn(cmd, op, stack);
         if(history.isCmd(cmd))
             return history.whichCmd(cmd);
