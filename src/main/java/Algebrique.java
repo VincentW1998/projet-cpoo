@@ -1,4 +1,5 @@
 import net.objecthunter.exp4j.ExpressionBuilder;
+import net.objecthunter.exp4j.function.Function;
 import net.objecthunter.exp4j.tokenizer.UnknownFunctionOrVariableException;
 
 import java.util.Map;
@@ -9,6 +10,7 @@ public class Algebrique {
     double result; // stock the result
     Map <String, Double> variables; // map of variables
     private Stack<Double> stack; // stack of result
+
 
     /* CONSTRUCTOR */
     Algebrique(Stack<Double> s) { //package-private
@@ -38,6 +40,13 @@ public class Algebrique {
     public void setLine(String line) {
         this.line = line;
     }
+//
+//    Function multipleVar = new Function("multipleVar", variables.size()) {
+//        @Override
+//        public double apply(double... args) {
+//
+//        }
+//    }
 
     // evaluate the algebric calculus without variables
     public boolean evaluate()  throws UnknownFunctionOrVariableException {
