@@ -22,6 +22,8 @@ public class REPL {
         while(true) {
             display(); // print ">"
             String cmd = input.nextLine(); // get the line of user
+            if(cmd.equals("exit"))
+                break;
             if(checkCmd(cmd)) {
                 history.save();
                 displayStack();
