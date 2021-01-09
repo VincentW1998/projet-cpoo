@@ -48,7 +48,7 @@ coller à la fin du fichier
 Ensuite pour finir avec java :
 *  `source /etc/environment`
 
-## Etape 2 : Maven**
+## Etape 2 : Maven
 
 Verifiez que vous avez bien la version 3.6.3 avec la ligne de commande suivante :
 *  `mvn -version`
@@ -59,7 +59,7 @@ Verifiez que vous avez bien la version 3.6.3 avec la ligne de commande suivante 
 Si vous ètes sous MacOs lancez maven avec la commande:
 *  `source ~/.bash_profile`
 
-## Etape 3 : Instruction de compilation et d'exécution**
+## Etape 3 : Instruction de compilation et d'exécution
 
 Aller dans le dossier calculatrice et exécutez le fichier run
 *  `./run`
