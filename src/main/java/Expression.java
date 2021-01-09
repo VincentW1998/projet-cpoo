@@ -61,13 +61,13 @@ public class Expression {
 
         if(x instanceof Variable) str += ((Variable) x).getName();
         else if (x instanceof Expression) str += x.toString();
-        else str += RPN.doubleToString((Double) x);
+        else if(x instanceof Double) str += RPN.doubleToString((Double) x);
 
         str += Operator;
 
         if(y instanceof Variable) str += ((Variable) y).getName();
         else if (y instanceof Expression) str += y.toString();
-        else str += RPN.doubleToString((Double) y);
+        else if(x instanceof Double) str += RPN.doubleToString((Double) y);
         return str + ")";
     }
 
