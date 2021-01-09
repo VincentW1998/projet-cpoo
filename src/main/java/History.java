@@ -6,13 +6,13 @@ import java.util.function.Function;
 
 
 public class History{
-    private LinkedList <Double> history;
-    private Map <String, Double> variables;
+    private LinkedList <Object> history;
+    private Map <String, Object> variables;
     private Map <String, Function <String,Boolean> > cmd;
-    private Stack <Double> stack;
+    private Stack <Object> stack;
 
     public History(Stack s){
-        history = new LinkedList <Double> ();
+        history = new LinkedList <> ();
         variables = new HashMap<>();
         cmd= new HashMap<>();
         stack = s;
@@ -62,7 +62,7 @@ public class History{
             System.out.println("the stack is empty");
             return false;
         }
-        Stack <Double> acc = new Stack<Double>();
+        Stack <Object> acc = new Stack<Object>();
         int target; // la position a laquelle s'arreter
         if(Math.abs(i) > stack.size()){
             System.out.println("index out of bounds, please select an other number");
@@ -71,7 +71,7 @@ public class History{
         if(i < 0) target = stack.size() + i;
         else target =  i;
         while (stack.size() != target + 1) acc.push(stack.pop());
-        double d = stack.peek();
+        Object d = stack.peek();
         while (!acc.isEmpty()) stack.push(acc.pop());
         stack.push(d);
         return true;
@@ -143,7 +143,7 @@ public class History{
         for(int i=0;i<history.size();i++)
             System.out.print(history.get(i) + " | ");
         System.out.println("\nSTACK :");
-        Stack <Double> acc = new Stack<Double>();
+        Stack <Object> acc = new Stack<>();
         while (!stack.isEmpty())acc.push(stack.pop());
         while (!acc.isEmpty()){
             System.out.print(acc.peek()+ " | ");

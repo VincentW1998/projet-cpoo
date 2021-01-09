@@ -19,7 +19,7 @@ public class REPL {
             display(); // print ">"
             String cmd = input.nextLine(); // get the line of user
             if(checkCmd(cmd)) {
-//                history.save();
+                history.save();
                 displayStack();
             }
             else continue;
