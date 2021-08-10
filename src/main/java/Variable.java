@@ -1,5 +1,5 @@
 public class Variable {
-    private String name;
+    private final String name;
 
     public Variable(String n){
         name = n;
